@@ -8,7 +8,10 @@ fi
 stage=$1
 region=$2
 
-outputs=$(aws cloudformation describe-stacks --stack-name todo-list-aws-$stage --region $region | jq '.Stacks[0].Outputs')
+echo "getting_base_url_api.sh --> Input 1 'stage' value: $stage"
+echo "getting_base_url_api.sh --> Input 2 'region' value: $region"
+
+outputs=$(aws cloudformation describe-stacks --stack-name todo-list-aws --region $region | jq '.Stacks[0].Outputs')
 
 extract_value() {
     echo "$outputs" | jq -r ".[] | select(.OutputKey==\"$1\") | .OutputValue"
