@@ -115,32 +115,51 @@ pipeline {
         }
 
         stage('Promote') {
-            
+
             steps {
                 sh "hostname"
                 sh "whoami"
-	            sh "pwd"
+	        sh "pwd"
  
                 catchError(buildResult: 'UNSTABLE', stageResult: 'FAILURE') {
                     withCredentials([string(credentialsId: 'my_token_git', variable: 'GIT_RUTA')]) {
-                        sh "echo \"GIT_RUTA: ${GIT_RUTA}\"" 
- 
+                        //sh "echo \"GIT_RUTA: ${GIT_RUTA}\"" 
+                        
                         sh """
                             git config --global user.email "monicadevops4@gmail.com"
                             git config --global user.name "Integra24"
-                            git checkout -- .
-                            git checkout master
-                            #git pull https://${GIT_RUTA}@github.com/Integra24/todo-list-aws.git master
-                            git pull https://my_token_git@github.com/Integra24/todo-list-aws.git master
                             
-                            git fetch origin
-                            git merge origin/develop || (git merge --abort && exit 1)
+			    # Limpiando directorio de trabajo	
+                            git checkout -- .
+			    # obtiene master	
+                            git checkout master
+                            git pull https://${GIT_RUTA}@github.com/Integra24/todo-list-aws.git master
+			    # obtiene develop	
+                            git checkout develop
+                            git pull https://${GIT_RUTA}@github.com/Integra24/todo-list-aws.git develop
+                            # merge
+			    git checkout master
+                            resulMerge= git merge develop	
+			    if(resulMerge) then {
+				echo 'conflicto' 
+				git merge --abort
+				git merge develop -X ours --no-commit
+				git checkout --ours Jenkinsfile
+				git add Jenkinsfile
+				git commit -m 'Merge develop con master  excluye Jenkinsfile'
+				}
+                            else {
+                                echo '8'
+            	                echo ' merge Ok'
+            	            }
+            	            fi
                             git push https://${GIT_RUTA}@github.com/Integra24/todo-list-aws.git master
                         """
                     }
                 }
             }
         }
+
 
 
     }
