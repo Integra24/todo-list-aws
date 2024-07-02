@@ -139,8 +139,8 @@ pipeline {
                             git pull https://${GIT_RUTA}@github.com/Integra24/todo-list-aws.git develop
                             # merge
 			    git checkout master
-                            resulMerge= git merge develop	
-			    if(resulMerge) then {
+                            mergeStatus= git merge develop	
+			    if(mergeStatus) then {
 				echo 'conflicto' 
 				git merge --abort
 				git merge develop -X ours --no-commit
@@ -149,7 +149,6 @@ pipeline {
 				git commit -m 'Merge develop con master  excluye Jenkinsfile'
 				}
                             else {
-                                echo '8'
             	                echo ' merge Ok'
             	            }
             	            fi
