@@ -140,7 +140,7 @@ pipeline {
                             # merge
 			    git checkout master
                             mergeStatus= git merge develop	
-			    if(mergeStatus) then {
+			    if(mergeStatus !=0) then {
 				echo 'conflicto' 
 				git merge --abort
 				git merge develop -X ours --no-commit
