@@ -114,52 +114,52 @@ pipeline {
             }
         }
 
+
         stage('Promote') {
 
             steps {
                 sh "hostname"
                 sh "whoami"
-	        sh "pwd"
+	            sh "pwd"
  
                 catchError(buildResult: 'UNSTABLE', stageResult: 'FAILURE') {
                     withCredentials([string(credentialsId: 'my_token_git', variable: 'GIT_RUTA')]) {
-                        //sh "echo \"GIT_RUTA: ${GIT_RUTA}\"" 
-                        
-                        sh """
-                            git config --global user.email "monicadevops4@gmail.com"
-                            git config --global user.name "Integra24"
+                
+                        script {
+                            sh "git config --global user.email 'monicadevops4@gmail.com'"
+                            sh "git config --global user.name 'Integra24'"
                             
-			    # Limpiando directorio de trabajo	
-                            git checkout -- .
-			    # obtiene master	
-                            git checkout master
-                            git pull https://${GIT_RUTA}@github.com/Integra24/todo-list-aws.git master
-			    # obtiene develop	
-                            git checkout develop
-                            git pull https://${GIT_RUTA}@github.com/Integra24/todo-list-aws.git develop
-                            # merge
-			    git checkout master
-                            mergeStatus= git merge develop	
-			    if(mergeStatus !=0) then {
-				echo 'conflicto' 
-				git merge --abort
-				git merge develop -X ours --no-commit
-				git checkout --ours Jenkinsfile
-				git add Jenkinsfile
-				git commit -m 'Merge develop con master  excluye Jenkinsfile'
-				}
+			                // Limpiando directorio de trabajo	
+                            sh "git checkout -- ."
+			                // obtiene master	
+                            sh "git checkout master"
+                            sh "git pull https://${GIT_RUTA}@github.com/Integra24/todo-list-aws.git master"
+			                // obtiene develop	"
+                            sh "git checkout develop "
+                            sh "git pull https://${GIT_RUTA}@github.com/Integra24/todo-list-aws.git develop "
+                            // merge
+			                sh "git checkout master "
+            			    def mergeStatus = sh(script: "git merge develop", returnStatus: true)
+            			     
+            			    if (mergeStatus != 0) {
+            			        
+                				sh "echo 'presenta conflicto' " 
+                				sh "git merge --abort "
+                				sh "git merge develop -X ours --no-commit "
+                				sh "git checkout --ours Jenkinsfile "
+                				sh "git add Jenkinsfile "
+                				sh "git commit -m 'Merge develop con master  excluye Jenkinsfile' "
+            				}
                             else {
-            	                echo ' merge Ok'
+            	                sh "echo ' merge Ok' "
             	            }
-            	            fi
-                            git push https://${GIT_RUTA}@github.com/Integra24/todo-list-aws.git master
-                        """
+                            sh "git push https://${GIT_RUTA}@github.com/Integra24/todo-list-aws.git master "
+                        }    
+                        
                     }
                 }
             }
         }
-
-
 
     }
 }
