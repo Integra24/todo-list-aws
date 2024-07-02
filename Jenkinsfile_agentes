@@ -34,7 +34,6 @@ pipeline {
                         --no-confirm-changeset"
             }
         }
-        
         stage('Base Salida') {
             // variable de salida
             environment {
@@ -44,29 +43,30 @@ pipeline {
             steps {
                 echo "Value for --> STAGE: ${env.STAGE}"
                 echo "Value for --> REGION: ${env.REGION}"
-
+    
                 script {
                     //permiso para ejecutar
                     sh "chmod +x getting_base_url_api.sh"
-
+    
                     //obtiene base_url
                     sh "./getting_base_url_api.sh ${env.STAGE} ${env.REGION}"
-
+    
                     //lista archivos
                     sh "ls -l *.tmp"
-
+    
                     // lee temporal
                     def BASE_URL = readFile('my_base_url_api.tmp').trim()
                     echo "Lee base_url: ${BASE_URL}"
-                    
+
                     env.FIND_BASE_URL_API = "${BASE_URL}"
-                    
+
                     //clean temporal files
                     sh "pwd"
                     sh "whoami"                    
                     sh "rm *.tmp"
                 }
-            }
+            }      
+  
         }
         stage('Rest tests') {
             agent { label 'Agent_Api_Rest' }
@@ -84,6 +84,7 @@ pipeline {
                     """
                     // Resultado en el archivo result.xml
                     junit 'result*.xml'
+                echo "paso 3"    
                 }
             }
         }
