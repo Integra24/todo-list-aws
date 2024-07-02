@@ -40,6 +40,7 @@ pipeline {
             environment {
                 FIND_BASE_URL_API = 'init'
             }
+            agent any
             steps {
                 echo "Value for --> STAGE: ${env.STAGE}"
                 echo "Value for --> REGION: ${env.REGION}"
@@ -72,14 +73,14 @@ pipeline {
             steps {
                 sh "hostname"
                 sh "whoami"
-	              sh "pwd"
+	            sh "pwd"
                 
                 catchError(buildResult: 'UNSTABLE', stageResult: 'FAILURE') {
                     sh """
                         # Lee variable de entorno FIND_BASE_URL_API
                         export BASE_URL=${env.FIND_BASE_URL_API}
                         # Ejecuta prueba rest api
-                        pytest --junitxml=result-rest.xml test/integration/todoApiTest.py -m lee
+                        pytest --junitxml=result-rest.xml /home/ubuntu/todo-list-aws/test/integration/todoApiTest.py -m lee
                     """
                     // Resultado en el archivo result.xml
                     junit 'result*.xml'
