@@ -110,8 +110,7 @@ pipeline {
                 echo "PRUEBA"        
                         export BASE_URL=${env.FIND_BASE_URL_API}
                         # Ejecuta pruebas de integración
-                        #pytest --junitxml=result-rest.xml /home/ubuntu/agente2/workspace/CI-agente-test@tmp/test/integration/todoApiTest.py -m "not lee"
-                        pytest --junitxml=result-rest.xml /home/ubuntu/todo-list-aws/test/integration/todoApiTest.py -m "not lee"
+                        pytest --junitxml=result-rest.xml /home/ubuntu/todo-list-aws/test/integration/todoApiTest.py 
                     """
                 echo "paso 2"    
                     // Almacena de resultado
