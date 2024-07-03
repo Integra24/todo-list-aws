@@ -39,11 +39,9 @@ pipeline {
                      pwd
                    """
                   dir('todo-list-aws') {               
-	                //sam build command
 	                sh "sam build"
 	                sleep(time: 1, unit: 'SECONDS')
 
-	                //sam deploy command
         	        sh "sam deploy --template-file template.yaml \
                         --stack-name ${env.STACK} --region ${env.REGION} \
                         --capabilities CAPABILITY_IAM \
