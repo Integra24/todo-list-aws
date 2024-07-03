@@ -11,14 +11,34 @@ pipeline {
  
     stages {
         stage('Get Code') {
-            steps {
-                echo 'Inicio de la clonación del código fuente!!!'
-                    git branch: 'master', url: 'https://github.com/Integra24/todo-list-aws.git' 
-            }
+          steps {
+                echo 'Clonando código fuente!!!'
+                // Mueve el contenido del repositorio todo-list-aws-config al repositorio todo-list-aws
+                
+                // Fuentes de repositorio todo-list-aws
+                dir('todo-list-aws') {
+                     git branch: 'develop', url: 'https://my_token_git@github.com/Integra24/todo-list-aws.git'
+                }
+                    
+                // Fuentes de respositorio  todo-list-aws-config
+                dir('todo-list-aws-config') {
+                    git branch: 'staging', url: 'https://my_token_git@github.com/Integra24/todo-list-aws-config.git'
+                }
+                    
+                // Copia el contenido de todo-list-aws-config a todo-list-aws
+                   sh 'cp -r todo-list-aws-config/* todo-list-aws/'
+           }
         }
 
         stage('Deploy'){
             steps{
+                  sh """
+                     echo 'Hostname, whoami y pwd'
+                     hostname
+                     whoami
+                     pwd
+                   """
+                    sh "cd todo-list-aws"                
                 //sam build command
                 sh "sam build"
 
@@ -68,7 +88,7 @@ pipeline {
                 }
             }
         }
-        stage('Rest tests') {
+        stage('Integration tests') {
             steps {
                 sh "hostname"
                 sh "whoami"
