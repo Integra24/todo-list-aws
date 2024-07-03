@@ -17,12 +17,12 @@ pipeline {
                 
                 // Fuentes de repositorio todo-list-aws
                 dir('todo-list-aws') {
-                     git branch: 'develop', url: 'https://my_token_git@github.com/Integra24/todo-list-aws.git'
+                     git branch: 'master', url: 'https://my_token_git@github.com/Integra24/todo-list-aws.git'
                 }
                     
                 // Fuentes de respositorio  todo-list-aws-config
                 dir('todo-list-aws-config') {
-                    git branch: 'staging', url: 'https://my_token_git@github.com/Integra24/todo-list-aws-config.git'
+                    git branch: 'production', url: 'https://my_token_git@github.com/Integra24/todo-list-aws-config.git'
                 }
                     
                 // Copia el contenido de todo-list-aws-config a todo-list-aws
