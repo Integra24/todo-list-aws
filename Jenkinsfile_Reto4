@@ -40,8 +40,9 @@ pipeline {
                    """
                   dir('todo-list-aws') {               
 	                sh "sam build"
+			}
 	                sleep(time: 1, unit: 'SECONDS')
-
+		   dir('todo-list-aws') {
         	        sh "sam deploy --template-file template.yaml \
                         --stack-name ${env.STACK} --region ${env.REGION} \
                         --capabilities CAPABILITY_IAM \
@@ -49,7 +50,7 @@ pipeline {
                         --no-fail-on-empty-changeset \
                         --s3-bucket ${env.BUCKET} --s3-prefix ${env.PREFIX} \
                         --no-confirm-changeset"
-		}
+		   }
             }
         }
         
