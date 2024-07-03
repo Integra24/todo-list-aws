@@ -38,20 +38,20 @@ pipeline {
                      whoami
                      pwd
                    """
-                    sh "cd todo-list-aws"                
-                //sam build command
-                sh "sam build"
+                  dir('todo-list-aws') {               
+	                //sam build command
+	                sh "sam build"
+	                sleep(time: 1, unit: 'SECONDS')
 
-                sleep(time: 1, unit: 'SECONDS')
-
-                //sam deploy command
-                sh "sam deploy --template-file template.yaml \
+	                //sam deploy command
+        	        sh "sam deploy --template-file template.yaml \
                         --stack-name ${env.STACK} --region ${env.REGION} \
                         --capabilities CAPABILITY_IAM \
                         --parameter-overrides Stage=${env.STAGE} \
                         --no-fail-on-empty-changeset \
                         --s3-bucket ${env.BUCKET} --s3-prefix ${env.PREFIX} \
                         --no-confirm-changeset"
+		}
             }
         }
         
