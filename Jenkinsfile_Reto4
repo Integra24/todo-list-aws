@@ -186,7 +186,11 @@ pipeline {
                     				sh "git merge --abort "
                     				sh "git merge develop -X ours --no-commit "
                     				sh "git checkout --ours Jenkinsfile "
+                              sh "git checkout --ours Jenkinsfile_agentes "
+                              sh "git checkout --ours Jenkinsfile_Reto4 "
                     				sh "git add Jenkinsfile "
+                              sh "git add Jenkinsfile_agentes "
+                              sh "git add Jenkinsfile_Reto4 "
                     				sh "git commit -m 'Merge develop con master  excluye Jenkinsfile' "
                 				    }
                                 else {
